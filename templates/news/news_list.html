@@ -1,0 +1,28 @@
+{% load static %}
+{% block content %}
+<div class='wrapper w-[1000px] p-5 ml-10 h-[420px] overflow-auto mx-auto space-y-20'>
+    <h1>News List</h1>
+    {% for news in news_list %}
+        <a href="{% url 'news:news-detail' news.id%}">
+           <div class="card" style="width: 18rem;">
+              <img class="card-img-top" src="{% static news.image %}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">{{ news.title }}</h5>
+              </div>
+        </a>
+          <ul class="list-group list-group-flush">
+              {% for tag in news.tags.all %}
+                  <li class="list-group-item">{{ tag.name }}</li>
+              {% endfor %}
+          </ul>
+          <div class="card-body">
+            <ul>
+                <li>{{news.views_count}}</li>
+                <li>{{news.likes}}</li>
+                <li>{{news.dislikes}}</li>
+            </ul>
+          </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{%block title%} News detail Page{%endblock%}
+{% block content %}
+        <div class="grid grid-cols-5 grap-6">
+            <div class="col-span-3">
+                <img src="{{ news.image.url }}" class="rounded-xl">
+            </div>
+        </div>
+<h1>{{news.title}}</h1>
+<h3>{{news.title}}</h3>
+<p>{{news.text}}</p>
+<ul>
+    {% for tag in news.tags.all%}
+        <li>{{tag.name}}</li>
+    {%endfor%}
+    <li>{{news.views_count}}</li>
+</ul>
+
+
+
+{%endblock%}
