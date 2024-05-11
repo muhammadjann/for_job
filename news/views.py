@@ -6,8 +6,13 @@ from .models import News, Tag
 
 class NewsListView(ListView):
     model = News
-    template_name = 'news/news_list.html'
+    template_name = 'news_list.html'
     context_object_name = 'news_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
 
 
 class NewsDetailView(DetailView):
@@ -23,7 +28,7 @@ class NewsDetailView(DetailView):
 
 class NewsByTagListView(ListView):
     model = News
-    template_name = 'news/news_list.html'
+    template_name = 'news/news_tags.html'
     context_object_name = 'news_list'
 
     def get_queryset(self):

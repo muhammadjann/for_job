@@ -1,28 +1,123 @@
-{% load static %}
-{% block content %}
-<div class='wrapper w-[1000px] p-5 ml-10 h-[420px] overflow-auto mx-auto space-y-20'>
-    <h1>News List</h1>
-    {% for news in news_list %}
-        <a href="{% url 'news:news-detail' news.id%}">
-           <div class="card" style="width: 18rem;">
-              <img class="card-img-top" src="{% static news.image %}" alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">{{ news.title }}</h5>
-              </div>
-        </a>
-          <ul class="list-group list-group-flush">
-              {% for tag in news.tags.all %}
-                  <li class="list-group-item">{{ tag.name }}</li>
-              {% endfor %}
-          </ul>
-          <div class="card-body">
-            <ul>
-                <li>{{news.views_count}}</li>
-                <li>{{news.likes}}</li>
-                <li>{{news.dislikes}}</li>
-            </ul>
-          </div>
-        </div>
-    {% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .wrapper {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .news-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+        .news-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 6px;
+        }
+        .news-item p {
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .tags-container {
+            margin-top: 5px;
+        }
+        .tag {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 2px 5px;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .tag a {
+            color: #333;
+            text-decoration: none;
+        }
+        .tag a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper" id="newsContainer">
+
 </div>
-{% endblock %}
+<script>
+    let pageNumber = 1;
+    let isLoading = false;
+
+    function fetchNews() {
+        if (!isLoading) {
+            isLoading = true;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                const news = JSON.parse(this.responseText);
+                let list = "";
+                for (let i = 0; i < news.length; i++) {
+                    const newsItem = news[i];
+                    let tagsHtml = "";
+                    if (newsItem.tags && newsItem.tags.length > 0) {
+                        for (let j = 0; j < newsItem.tags.length; j++) {
+                            tagsHtml += "<span class='tag'><a href='/tag/" + encodeURIComponent(newsItem.tags[j].name) + "'>" + newsItem.tags[j].name + "</a></span>";
+                        }
+                    }
+                    list += "<div class='news-item'>" +
+                            "<a href='/news-detail/" + newsItem.id + "' class='news-item'>" +
+                            "<img src='" + newsItem.image + "' alt='" + newsItem.title + "'>" +
+                            "<div>" +
+                            "<p><strong>Title:</strong> " + newsItem.title + "</p>" +
+                            "<p><strong>Views:</strong> " + newsItem.views_count + "</p>" +
+                            "<div class='tags-container'><strong>Tags:</strong> " + tagsHtml + "</div>" +
+                            "</div>" +
+                            "</div>";
+                }
+                document.getElementById('newsContainer').innerHTML += list;
+                isLoading = false;
+            }
+            xhttp.open("GET", "http://127.0.0.1:8000/api/v1/news/?page=" + pageNumber);
+            xhttp.send();
+            pageNumber++;
+        }
+    }
+
+    function checkScroll() {
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolledHeight = window.scrollY;
+        if (scrolledHeight >= scrollableHeight) {
+            fetchNews();
+        }
+    }
+
+    window.addEventListener('scroll', checkScroll);
+
+    fetchNews();
+</script>
+</body>
+</html>
