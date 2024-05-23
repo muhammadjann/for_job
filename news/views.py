@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import News, Tag
 
-
 class NewsListView(ListView):
     model = News
     template_name = 'news_list.html'
@@ -35,3 +34,6 @@ class NewsByTagListView(ListView):
         tag_name = self.kwargs.get('tag')
         queryset = News.objects.filter(tags__name__in=[tag_name])
         return queryset
+
+
+

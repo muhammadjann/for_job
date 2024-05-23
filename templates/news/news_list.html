@@ -11,6 +11,7 @@
             padding: 0;
             background-color: #f7f7f7;
         }
+
         .wrapper {
             width: 100%;
             max-width: 1000px;
@@ -21,6 +22,7 @@
             border-radius: 8px;
             margin-top: 20px;
         }
+
         .news-item {
             padding: 10px;
             border-bottom: 1px solid #ddd;
@@ -30,6 +32,7 @@
             display: flex;
             align-items: center;
         }
+
         .news-item img {
             width: 100px;
             height: 100px;
@@ -37,17 +40,21 @@
             margin-right: 20px;
             border-radius: 6px;
         }
+
         .news-item p {
             margin: 0;
         }
+
         .loading {
             text-align: center;
             margin-top: 20px;
             font-style: italic;
         }
+
         .tags-container {
             margin-top: 5px;
         }
+
         .tag {
             display: inline-block;
             margin-right: 5px;
@@ -56,10 +63,12 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
         .tag a {
             color: #333;
             text-decoration: none;
         }
+
         .tag a:hover {
             text-decoration: underline;
         }
@@ -89,14 +98,16 @@
                         }
                     }
                     list += "<div class='news-item'>" +
-                            "<a href='/news-detail/" + newsItem.id + "' class='news-item'>" +
-                            "<img src='" + newsItem.image + "' alt='" + newsItem.title + "'>" +
-                            "<div>" +
-                            "<p><strong>Title:</strong> " + newsItem.title + "</p>" +
-                            "<p><strong>Views:</strong> " + newsItem.views_count + "</p>" +
-                            "<div class='tags-container'><strong>Tags:</strong> " + tagsHtml + "</div>" +
-                            "</div>" +
-                            "</div>";
+                        "<a href='/news-detail/" + newsItem.id + "' class='news-item'>" +
+                        "<img src='" + newsItem.image + "' alt='" + newsItem.title + "'>" +
+                        "<div>" +
+                        "<p><strong>Title:</strong> " + newsItem.title + "</p>" +
+                        "<p><strong>Views:</strong> " + newsItem.views_count + "</p>" +
+                        "<div class='tags-container'><strong>Tags:</strong> " + tagsHtml + "</div>" +
+                        "<p><strong>Likes:</strong> " + newsItem.likes + "</p>" +
+                        "<p><strong>Dislikes:</strong> " + newsItem.dislikes + "</p>" +
+                        "</div>" +
+                        "</div>";
                 }
                 document.getElementById('newsContainer').innerHTML += list;
                 isLoading = false;
@@ -119,5 +130,3 @@
 
     fetchNews();
 </script>
-</body>
-</html>
